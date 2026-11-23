@@ -1,0 +1,1419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Travel English Confidence Studio — A2 Brasil</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Plus Jakarta Sans', 'sans-serif'],
+          },
+          colors: {
+            sand: {
+              50: '#FDFBF7',
+              100: '#F8F3E9',
+              200: '#EFE5D1',
+              300: '#E2D0B1',
+            },
+            skycalm: {
+              50: '#F0F7FF',
+              100: '#E0EFFE',
+              500: '#2B7DE9',
+              600: '#1D64C8',
+              700: '#164E9E',
+            },
+            leaf: {
+              50: '#ECFDF5',
+              100: '#D1FAE5',
+              500: '#10B981',
+              600: '#059669',
+              700: '#047857',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Smooth custom scrollbar and subtle micro-animations */
+    body {
+      background-color: #FDFBF7;
+      color: #1E293B;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .card-hover {
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .card-hover:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px -8px rgba(15, 23, 42, 0.08);
+    }
+
+    /* Pulse ring when audio is playing */
+    @keyframes softPulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.06); opacity: 0.85; }
+    }
+    .speaking-active {
+      animation: softPulse 1s infinite ease-in-out;
+    }
+
+    /* Hide scrollbar for horizontal category pills on mobile */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-skycalm-100 selection:text-skycalm-700">
+
+  <!-- Top Navigation & Confidence Header -->
+  <header class="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-sand-200 shadow-sm">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3">
+      <!-- Brand / Title -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-skycalm-500 to-leaf-500 flex items-center justify-center text-white text-xl shadow-sm">
+          🌎
+        </div>
+        <div>
+          <h1 class="font-display font-bold text-base sm:text-lg text-slate-800 leading-tight">
+            Travel English Studio
+          </h1>
+          <p class="text-xs text-slate-500 font-medium">
+            A2 Confidence Builder • Sem medo de errar
+          </p>
+        </div>
+      </div>
+
+      <!-- Right Controls: Portuguese Support Toggle & Rescue Button -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <!-- Toggle Portuguese Hints -->
+        <button
+          id="togglePtBtn"
+          onclick="togglePortugueseHints()"
+          class="flex items-center gap-2 px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold border transition-all cursor-pointer bg-leaf-50 text-leaf-700 border-leaf-200 hover:bg-leaf-100"
+          title="Mostrar ou esconder dicas em Português"
+        >
+          <span>🇧🇷</span>
+          <span id="ptToggleText">Dicas PT: ON</span>
+        </button>
+
+        <!-- Emergency Rescue Phrases Button -->
+        <button
+          onclick="openRescueModal()"
+          class="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-amber-100 text-amber-900 border border-amber-300 hover:bg-amber-200 transition-all shadow-xs cursor-pointer"
+        >
+          <span>🆘</span>
+          <span>Deu Branco?</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 py-6 space-y-6">
+
+    <!-- Encouraging Mindset Banner & Progress Overview -->
+    <section class="bg-gradient-to-r from-skycalm-50 via-white to-leaf-50 rounded-3xl p-5 sm:p-6 border border-skycalm-100 shadow-xs">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-5">
+        <div class="space-y-2 max-w-xl">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-skycalm-100 text-xs font-semibold text-skycalm-700">
+            <span>💚</span>
+            <span>Lembrete de Ouro / Golden Rule</span>
+          </div>
+          <h2 id="mindsetQuoteEn" class="font-display font-bold text-lg sm:text-xl text-slate-800">
+            "Perfection is not the goal — connection is!"
+          </h2>
+          <p id="mindsetQuotePt" class="pt-hint text-sm text-slate-600 leading-relaxed">
+            Nativos adoram quando você tenta falar. Sotaque brasileiro é charme, não defeito! Use frases curtas, sorria e respire fundo.
+          </p>
+          <button
+            onclick="cycleMindsetQuote()"
+            class="text-xs font-semibold text-skycalm-600 hover:text-skycalm-700 underline underline-offset-2 pt-1 cursor-pointer"
+          >
+            ↻ Ver outra frase de incentivo
+          </button>
+        </div>
+
+        <!-- Confidence Tracker Card -->
+        <div class="bg-white rounded-2xl p-4 border border-sand-200 shadow-xs min-w-[230px] flex flex-col justify-between">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Seu Progresso</span>
+            <span id="badgePill" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-leaf-100 text-leaf-700">
+              🌱 First Step
+            </span>
+          </div>
+          <div class="flex items-baseline gap-2">
+            <span id="practicedCount" class="font-display font-extrabold text-3xl text-slate-800">0</span>
+            <span class="text-xs text-slate-500 font-medium">frases praticadas em voz alta</span>
+          </div>
+          <div class="w-full bg-sand-100 h-2.5 rounded-full mt-3 overflow-hidden">
+            <div id="progressBar" class="bg-gradient-to-r from-skycalm-500 to-leaf-500 h-full rounded-full transition-all duration-500" style="width: 5%"></div>
+          </div>
+          <p id="nextMilestoneText" class="text-[11px] text-slate-500 mt-1.5">
+            Meta: 5 frases para desbloquear ☕ Coffee Ready
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Mode Switcher: Learn & Build vs. No-Panic Practice Simulator -->
+    <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-sand-100/80 p-1.5 rounded-2xl border border-sand-200">
+      <button
+        id="tabExploreBtn"
+        onclick="switchMainMode('explore')"
+        class="flex-1 py-3 px-4 rounded-xl font-display font-bold text-sm flex items-center justify-center gap-2 transition-all cursor-pointer bg-white text-skycalm-700 shadow-xs"
+      >
+        <span>🧳</span>
+        <span>1. Frases & Perguntas Fáceis (Guiado)</span>
+      </button>
+      <button
+        id="tabSimulatorBtn"
+        onclick="switchMainMode('simulator')"
+        class="flex-1 py-3 px-4 rounded-xl font-display font-bold text-sm flex items-center justify-center gap-2 transition-all cursor-pointer text-slate-600 hover:text-slate-900"
+      >
+        <span>🎙️</span>
+        <span>2. Simulador "Sem Pânico" (Conversa Real)</span>
+      </button>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- VIEW 1: EXPLORE & BUILD EASY EVERYDAY QUESTIONS                       -->
+    <!-- ===================================================================== -->
+    <div id="exploreView" class="space-y-5">
+      <!-- Category Pills -->
+      <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1" id="categoryBar">
+        <!-- Populated dynamically by JS -->
+      </div>
+
+      <!-- Scenario Context Header -->
+      <div id="categoryBanner" class="bg-white rounded-2xl p-4 border border-sand-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h3 id="catTitle" class="font-display font-bold text-base sm:text-lg text-slate-800"></h3>
+          <p id="catDesc" class="pt-hint text-xs sm:text-sm text-slate-600 mt-0.5"></p>
+        </div>
+        <div class="text-xs font-medium text-slate-500 bg-sand-50 px-3 py-2 rounded-xl border border-sand-200 shrink-0">
+          💡 Dica: Clique em <strong>🐢 Devagar</strong> e repita 2x!
+        </div>
+      </div>
+
+      <!-- Cards Grid -->
+      <div id="cardsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <!-- Phrase cards injected here -->
+      </div>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- VIEW 2: "NO-PANIC" INTERACTIVE CONVERSATION SIMULATOR                 -->
+    <!-- ===================================================================== -->
+    <div id="simulatorView" class="hidden space-y-5">
+      <div class="bg-white rounded-3xl p-5 sm:p-8 border border-sand-200 shadow-xs max-w-3xl mx-auto">
+        <!-- Simulator Header -->
+        <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-sand-100">
+          <div class="flex items-center gap-2.5">
+            <span id="simScenarioBadge" class="px-3 py-1 rounded-full text-xs font-bold bg-skycalm-100 text-skycalm-700">
+              ☕ Café & Restaurant
+            </span>
+            <span id="simStepCounter" class="text-xs font-semibold text-slate-400">
+              Situação 1 de 8
+            </span>
+          </div>
+          <button
+            onclick="nextSimulatorScenario()"
+            class="text-xs font-semibold px-3 py-1.5 rounded-xl bg-sand-100 hover:bg-sand-200 text-slate-700 transition-colors cursor-pointer"
+          >
+            Pular situação ➔
+          </button>
+        </div>
+
+        <!-- Step 1: The Other Person Speaks -->
+        <div class="mt-6 space-y-3">
+          <p class="text-xs font-bold uppercase tracking-wider text-slate-400">
+            Passo 1: Ouça o que a pessoa pergunta para você
+          </p>
+          <div class="bg-skycalm-50/70 border border-skycalm-100 rounded-2xl p-4 sm:p-5 flex items-start gap-4">
+            <div id="simAvatar" class="w-12 h-12 rounded-2xl bg-white border border-skycalm-100 flex items-center justify-center text-2xl shrink-0 shadow-2xs">
+              🧑‍🍳
+            </div>
+            <div class="flex-1 space-y-2">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <span id="simRole" class="text-xs font-bold text-skycalm-700">Barista (Atendente)</span>
+                <div class="flex items-center gap-1.5">
+                  <button
+                    onclick="speakSimulatorPrompt(1.0)"
+                    class="px-3 py-1.5 rounded-xl bg-skycalm-600 hover:bg-skycalm-700 text-white text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
+                  >
+                    <span>🔊</span> Ouvir (Normal)
+                  </button>
+                  <button
+                    onclick="speakSimulatorPrompt(0.72)"
+                    class="px-3 py-1.5 rounded-xl bg-white hover:bg-skycalm-100 text-skycalm-700 border border-skycalm-200 text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
+                  >
+                    <span>🐢</span> Devagar
+                  </button>
+                </div>
+              </div>
+              <p id="simPromptEn" class="font-display font-bold text-lg sm:text-xl text-slate-800">
+                "Hi there! What can I get for you today?"
+              </p>
+              <p id="simPromptPt" class="pt-hint text-sm text-slate-600">
+                Tradução: "Oi! O que eu posso preparar/pegar para você hoje?"
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2: Choose an Easy, Natural A2 Response -->
+        <div class="mt-6 space-y-3">
+          <p class="text-xs font-bold uppercase tracking-wider text-slate-400">
+            Passo 2: Escolha uma resposta simples (todas funcionam!)
+          </p>
+          <div id="simOptionsContainer" class="space-y-3">
+            <!-- Options injected dynamically -->
+          </div>
+        </div>
+
+        <!-- Step 3: Feedback + Speak Out Loud Confidence Check -->
+        <div id="simFeedbackBox" class="hidden mt-6 bg-leaf-50 border border-leaf-200 rounded-2xl p-5 space-y-4">
+          <div class="flex items-start gap-3">
+            <span class="text-2xl">🎉</span>
+            <div class="space-y-1">
+              <h4 class="font-display font-bold text-base text-leaf-800">
+                Ótima escolha! Simples, educada e 100% compreensível.
+              </h4>
+              <p id="simWhyItWorks" class="pt-hint text-sm text-leaf-900/80 leading-relaxed"></p>
+            </div>
+          </div>
+
+          <!-- Pronunciation Guide for Chosen Answer -->
+          <div class="bg-white rounded-xl p-4 border border-leaf-200 space-y-2">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <span class="text-xs font-bold text-slate-500 uppercase">Sua resposta escolhida:</span>
+              <div class="flex items-center gap-2">
+                <button
+                  onclick="speakChosenSimAnswer(1.0)"
+                  class="px-3 py-1.5 rounded-lg bg-leaf-600 hover:bg-leaf-700 text-white text-xs font-semibold flex items-center gap-1 cursor-pointer"
+                >
+                  <span>🔊</span> Ouvir modelo
+                </button>
+                <button
+                  onclick="speakChosenSimAnswer(0.72)"
+                  class="px-3 py-1.5 rounded-lg bg-leaf-50 hover:bg-leaf-100 text-leaf-700 border border-leaf-200 text-xs font-semibold flex items-center gap-1 cursor-pointer"
+                >
+                  <span>🐢</span> Bem devagar
+                </button>
+              </div>
+            </div>
+            <p id="simChosenText" class="font-display font-bold text-base sm:text-lg text-slate-800"></p>
+            <p id="simChosenTip" class="pt-hint text-xs text-amber-800 bg-amber-50 px-3 py-2 rounded-lg border border-amber-200/70"></p>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-1">
+            <button
+              id="simTriedBtn"
+              onclick="markSimulatorTried()"
+              class="py-3 px-5 rounded-xl bg-leaf-600 hover:bg-leaf-700 text-white font-display font-bold text-sm flex items-center justify-center gap-2 shadow-xs transition-all cursor-pointer"
+            >
+              <span>🗣️</span>
+              <span>Eu falei em voz alta! (+1 Confiança)</span>
+            </button>
+            <button
+              onclick="nextSimulatorScenario()"
+              class="py-3 px-5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 font-semibold text-sm flex items-center justify-center gap-2 transition-all cursor-pointer"
+            >
+              <span>Próxima conversa</span>
+              <span>➔</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Floating Toast Notification (Replaces alert()) -->
+  <div
+    id="toastMessage"
+    class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 pointer-events-none opacity-0 transition-all duration-300 translate-y-3"
+  >
+    <div class="bg-slate-900 text-white px-4 py-2.5 rounded-2xl shadow-lg text-xs sm:text-sm font-medium flex items-center gap-2">
+      <span id="toastIcon">✨</span>
+      <span id="toastText">Frase praticada!</span>
+    </div>
+  </div>
+
+  <!-- Emergency "Deu Branco?" Rescue Modal -->
+  <div
+    id="rescueModal"
+    class="fixed inset-0 z-50 hidden bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4"
+    onclick="if(event.target === this) closeRescueModal()"
+  >
+    <div class="bg-white rounded-3xl max-w-lg w-full p-5 sm:p-6 shadow-xl border border-sand-200 max-h-[88vh] overflow-y-auto space-y-4">
+      <div class="flex items-center justify-between border-b border-sand-100 pb-3">
+        <div class="flex items-center gap-2.5">
+          <span class="text-2xl">🆘</span>
+          <div>
+            <h3 class="font-display font-bold text-lg text-slate-800">Kit Anti-Pânico (Rescue Phrases)</h3>
+            <p class="text-xs text-slate-500">Use estas frases quando travar ou não entender algo</p>
+          </div>
+        </div>
+        <button
+          onclick="closeRescueModal()"
+          class="w-9 h-9 rounded-xl bg-sand-100 hover:bg-sand-200 text-slate-600 font-bold flex items-center justify-center cursor-pointer"
+          aria-label="Fechar"
+        >
+          ✕
+        </button>
+      </div>
+
+      <p class="text-xs sm:text-sm text-slate-600 bg-amber-50 border border-amber-200 rounded-xl p-3">
+        <strong>Respire fundo!</strong> Pedir para alguém falar mais devagar mostra confiança e educação. Todo viajante usa isso.
+      </p>
+
+      <div id="rescueList" class="space-y-3">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="max-w-5xl w-full mx-auto px-4 sm:px-6 py-6 text-center text-xs text-slate-400 border-t border-sand-200/70 mt-8">
+    Feito com carinho para destravar seu Inglês de Viagem (Nível A2) • Clique em qualquer botão de áudio para ouvir a pronúncia.
+  </footer>
+
+  <script>
+    // =========================================================================
+    // 1. DATA: CATEGORIES, EASY EVERYDAY QUESTIONS, BRAZILIAN TIPS & BUILDERS
+    // =========================================================================
+    const MINDSET_QUOTES = [
+      {
+        en: '"Perfection is not the goal — connection is!"',
+        pt: 'Nativos adoram quando você tenta falar. Sotaque brasileiro é charme, não defeito! Use frases curtas, sorria e respire fundo.'
+      },
+      {
+        en: '"Simple English is smart English."',
+        pt: 'Você não precisa de gramática difícil para viajar o mundo. Com 50 perguntas simples do dia a dia, você resolve quase tudo!'
+      },
+      {
+        en: '"Making mistakes means you are practicing."',
+        pt: 'Se você disse "I go yesterday", a pessoa entendeu perfeitamente que foi ontem. Não se cobre perfeição — celebre cada tentativa!'
+      },
+      {
+        en: '"Pause, smile, and say: One moment, please."',
+        pt: 'Precisa de 3 segundos para pensar na palavra? Sorria e diga "One moment, please." Isso tira toda a pressão!'
+      }
+    ];
+
+    const RESCUE_PHRASES = [
+      {
+        en: "Sorry, could you speak a little slower, please?",
+        pt: "Desculpe, você poderia falar um pouco mais devagar, por favor?",
+        brTip: "Pronúncia fácil: 'Sór-ri, cud iú spík a lí-rou slôu-er, plíz?' (O 't' de 'little' vira som de 'r' suave)."
+      },
+      {
+        en: "One moment, please. I'm still learning English.",
+        pt: "Um momento, por favor. Ainda estou aprendendo inglês.",
+        brTip: "Essa frase derrete o coração de qualquer atendente — eles imediatamente ficam mais pacientes e simpáticos!"
+      },
+      {
+        en: "How do you say this in English?",
+        pt: "Como se diz isso em inglês? (Apontando para algo)",
+        brTip: "Perfeita para mercados, cardápios e lojas. Apenas aponte e pergunte!"
+      },
+      {
+        en: "Could you write it down for me, please?",
+        pt: "Você poderia escrever isso para mim, por favor?",
+        brTip: "Ótima para números, endereços, preços ou horários quando o sotaque estiver difícil."
+      },
+      {
+        en: "I understand a little, thank you for your help!",
+        pt: "Eu entendo um pouco, obrigado(a) pela sua ajuda!",
+        brTip: "Cuidado com 'thank': coloque a pontinha da língua entre os dentes para não soar como 'tank' (tanque)."
+      }
+    ];
+
+    const CATEGORIES = [
+      {
+        id: 'smalltalk',
+        icon: '💬',
+        label: 'Papo Fácil & Amigos',
+        title: '💬 Small Talk & Everyday Questions (Conversa Leve)',
+        desc: 'Perguntas fáceis sobre comida, clima, cidade e viagens para puxar assunto sem pressão no hostel, avião ou café.'
+      },
+      {
+        id: 'cafe',
+        icon: '🍽️',
+        label: 'Café & Restaurante',
+        title: '🍽️ Café & Restaurant (Pedindo sem medo)',
+        desc: 'Frases diretas e educadas para pedir comida, café, água e a conta.'
+      },
+      {
+        id: 'airport',
+        icon: '✈️',
+        label: 'Aeroporto & Imigração',
+        title: '✈️ Airport & Immigration (Passo a passo)',
+        desc: 'Perguntas e respostas curtas que você realmente usa no check-in, embarque e imigração.'
+      },
+      {
+        id: 'hotel',
+        icon: '🏨',
+        label: 'Hotel & Hospedagem',
+        title: '🏨 Hotel & Check-in (Conforto & Ajuda)',
+        desc: 'Como fazer check-in, pedir a senha do Wi-Fi e resolver pequenos problemas no quarto.'
+      },
+      {
+        id: 'directions',
+        icon: '🗺️',
+        label: 'Ruas & Compras',
+        title: '🗺️ Getting Around & Shopping (Direções & Preços)',
+        desc: 'Pergunte onde fica o metrô, quanto custa algo e pague com tranquilidade.'
+      }
+    ];
+
+    const PHRASE_CARDS = [
+      // --- SMALL TALK & EVERYDAY QUESTIONS ---
+      {
+        id: 'st1',
+        category: 'smalltalk',
+        tag: 'Quebra-gelo fácil',
+        en: "Hi! Where are you from?",
+        pt: "Oi! De onde você é?",
+        brTip: "Não engula o 'M' no final de 'from' — feche os lábios suavemente no 'm'. Resposta pronta: 'I'm from Brazil!'",
+        builderPrompt: "Monte sua resposta rápida:",
+        builderTemplate: "Hi! I'm from _____, in Brazil.",
+        builderChips: ["São Paulo", "Rio", "Minas", "the south of Brazil"]
+      },
+      {
+        id: 'st2',
+        category: 'smalltalk',
+        tag: 'Comida (Todo mundo ama!)',
+        en: "What local food do you recommend here?",
+        pt: "Qual comida local você recomenda aqui?",
+        brTip: "Fale 'rê-co-MEND' (sílaba tônica no final). Ótima pergunta para fazer a garçons, motoristas ou recepcionistas!",
+        builderPrompt: "Conte o que você gosta de comer:",
+        builderTemplate: "I really like _____ and _____.",
+        builderChips: ["pasta", "coffee", "burgers", "local food", "desserts"]
+      },
+      {
+        id: 'st3',
+        category: 'smalltalk',
+        tag: 'Sobre a viagem',
+        en: "Is this your first time here?",
+        pt: "É a sua primeira vez aqui?",
+        brTip: "Cuidado para não dizer 'firs-tchi' — o 't' de 'first' é bem sequinho: 'fârst taim'.",
+        builderPrompt: "Responda sobre sua viagem:",
+        builderTemplate: "Yes, it's my first time! I'm staying for _____.",
+        builderChips: ["three days", "one week", "ten days", "the weekend"]
+      },
+      {
+        id: 'st4',
+        category: 'smalltalk',
+        tag: 'Rotina & Clima',
+        en: "How is the weather today? Is it cold?",
+        pt: "Como está o clima hoje? Está frio?",
+        brTip: "Em 'weather', o 'th' vibra como um 'd' suave ('ué-der'). Em 'cold', o 'l' tem som de 'u' inglês ('côuld').",
+        builderPrompt: "Fale do clima do Brasil:",
+        builderTemplate: "In Brazil, the weather is usually _____.",
+        builderChips: ["warm and sunny", "very hot", "nice", "a little rainy"]
+      },
+      {
+        id: 'st5',
+        category: 'smalltalk',
+        tag: 'Fazer amigos',
+        en: "What do you like to do on weekends?",
+        pt: "O que você gosta de fazer nos fins de semana?",
+        brTip: "Pergunta super leve do dia a dia! Em 'like', não coloque um 'i' no final ('laik', não 'lai-qui').",
+        builderPrompt: "Complete com seus hobbies:",
+        builderTemplate: "On weekends, I like to _____ and _____.",
+        builderChips: ["travel", "watch movies", "walk in the park", "try new restaurants", "listen to music"]
+      },
+      {
+        id: 'st6',
+        category: 'smalltalk',
+        tag: 'Dicas de passeio',
+        en: "What is your favorite place in this city?",
+        pt: "Qual é o seu lugar favorito nesta cidade?",
+        brTip: "Fale 'FÊI-vrit' (apenas 2 sílabas, não 'fa-vo-ri-te'). As pessoas adoram dar dicas da própria cidade!",
+        builderPrompt: "Diga o que você quer visitar:",
+        builderTemplate: "I really want to visit _____.",
+        builderChips: ["the main square", "a good museum", "the local market", "a nice park"]
+      },
+
+      // --- CAFÉ & RESTAURANT ---
+      {
+        id: 'cf1',
+        category: 'cafe',
+        tag: 'Pedido mágico e educado',
+        en: "Can I have a coffee and a croissant, please?",
+        pt: "Pode me ver um café e um croissant, por favor?",
+        brTip: "'Can I have...' é a fórmula de ouro dos viajantes! Junte tudo: 'Ké-nai rév...'",
+        builderPrompt: "Monte seu pedido no café:",
+        builderTemplate: "Hi! Can I have _____, please?",
+        builderChips: ["a cappuccino", "a bottle of water", "a sandwich", "orange juice"]
+      },
+      {
+        id: 'cf2',
+        category: 'cafe',
+        tag: 'Restaurante',
+        en: "A table for two, please.",
+        pt: "Uma mesa para dois, por favor.",
+        brTip: "Curto, direto e perfeito. Não precisa montar uma frase enorme na entrada do restaurante!",
+        builderPrompt: "Escolha o tamanho da mesa:",
+        builderTemplate: "Hello! A table for _____, please.",
+        builderChips: ["one", "two", "three", "four"]
+      },
+      {
+        id: 'cf3',
+        category: 'cafe',
+        tag: 'Na hora de pagar',
+        en: "Can I have the bill, please? By card.",
+        pt: "Pode trazer a conta, por favor? No cartão.",
+        brTip: "Nos EUA usam mais 'the check'; na Europa/Reino Unido usam 'the bill'. Ambos são entendidos em todo lugar!",
+        builderPrompt: "Escolha como vai pagar:",
+        builderTemplate: "Excuse me, can I pay _____?",
+        builderChips: ["by credit card", "in cash", "with Apple Pay", "separately"]
+      },
+      {
+        id: 'cf4',
+        category: 'cafe',
+        tag: 'Cardápio',
+        en: "What is in this dish?",
+        pt: "O que vem neste prato?",
+        brTip: "Aponte para o cardápio e pergunte! 'Dish' termina com som de 'ch' de 'chave' ('dích').",
+        builderPrompt: "Avise se não come algo:",
+        builderTemplate: "I don't eat _____, is that okay?",
+        builderChips: ["meat", "seafood", "spicy food", "peanuts"]
+      },
+
+      // --- AIRPORT & IMMIGRATION ---
+      {
+        id: 'ap1',
+        category: 'airport',
+        tag: 'Imigração (Clássica)',
+        en: "I'm here on vacation for ten days.",
+        pt: "Estou aqui de férias por dez dias.",
+        brTip: "Resposta direta para 'What is the purpose of your visit?'. Fale 'va-KÊI-shon'.",
+        builderPrompt: "Monte sua resposta da imigração:",
+        builderTemplate: "I'm here on vacation for _____.",
+        builderChips: ["one week", "ten days", "two weeks", "five days"]
+      },
+      {
+        id: 'ap2',
+        category: 'airport',
+        tag: 'Check-in / Embarque',
+        en: "Where is boarding gate B12?",
+        pt: "Onde fica o portão de embarque B12?",
+        brTip: "Em 'gate', não fale 'guei-tchi' — termine seco no 't': 'guêit'.",
+        builderPrompt: "Pergunte sobre seu voo:",
+        builderTemplate: "Excuse me, where is _____?",
+        builderChips: ["gate A4", "baggage claim", "passport control", "the restroom"]
+      },
+      {
+        id: 'ap3',
+        category: 'airport',
+        tag: 'Assento no avião',
+        en: "I would like a window seat, please.",
+        pt: "Eu gostaria de um assento na janela, por favor.",
+        brTip: "'Window' = janela, 'Aisle' (pronuncia-se 'áil', sem o S) = corredor.",
+        builderPrompt: "Escolha sua preferência:",
+        builderTemplate: "I would like _____, please.",
+        builderChips: ["a window seat", "an aisle seat", "to check one bag"]
+      },
+      {
+        id: 'ap4',
+        category: 'airport',
+        tag: 'Bagagem',
+        en: "I only have this carry-on bag.",
+        pt: "Eu só tenho esta mala de mão.",
+        brTip: "'Carry-on' é a mala pequena que vai com você na cabine do avião.",
+        builderPrompt: "Diga quantas malas tem:",
+        builderTemplate: "I have _____ to check in.",
+        builderChips: ["one suitcase", "two bags", "no bags"]
+      },
+
+      // --- HOTEL & CHECK-IN ---
+      {
+        id: 'ht1',
+        category: 'hotel',
+        tag: 'Chegada no hotel',
+        en: "Hi! I have a reservation under Silva.",
+        pt: "Oi! Eu tenho uma reserva no nome Silva.",
+        brTip: "'Under' (no nome de) é a palavra que os recepcionistas mais usam! Soa super natural.",
+        builderPrompt: "Pratique com seu sobrenome:",
+        builderTemplate: "Hello! I have a reservation under _____.",
+        builderChips: ["Silva", "Santos", "Oliveira", "my last name"]
+      },
+      {
+        id: 'ht2',
+        category: 'hotel',
+        tag: 'Essencial!',
+        en: "What is the Wi-Fi password, please?",
+        pt: "Qual é a senha do Wi-Fi, por favor?",
+        brTip: "Em inglês se diz 'Uái-Fái' (não 'Ui-Fi'). 'Password' = senha.",
+        builderPrompt: "Pergunte algo prático no hotel:",
+        builderTemplate: "What time is _____, please?",
+        builderChips: ["breakfast", "check-out", "check-in"]
+      },
+      {
+        id: 'ht3',
+        category: 'hotel',
+        tag: 'Guardar malas',
+        en: "Can I leave my bags here until check-in?",
+        pt: "Posso deixar minhas malas aqui até o check-in?",
+        brTip: "'Leave' (deixar) tem o som de 'i' alongado ('líiv'). Muito útil quando seu voo chega cedo!",
+        builderPrompt: "Peça ajuda na recepção:",
+        builderTemplate: "Can I have _____, please?",
+        builderChips: ["an extra towel", "another room key", "a city map", "a taxi"]
+      },
+
+      // --- GETTING AROUND & SHOPPING ---
+      {
+        id: 'dr1',
+        category: 'directions',
+        tag: 'Localização',
+        en: "Excuse me, how do I get to the train station?",
+        pt: "Com licença, como eu chego na estação de trem?",
+        brTip: "'Excuse me' abre qualquer conversa educadamente ('Iks-KIÚZ mi').",
+        builderPrompt: "Pergunte como chegar a:",
+        builderTemplate: "Excuse me, how do I get to _____?",
+        builderChips: ["the subway", "the city center", "this address", "the museum"]
+      },
+      {
+        id: 'dr2',
+        category: 'directions',
+        tag: 'Compras',
+        en: "How much is this, please?",
+        pt: "Quanto custa isso, por favor?",
+        brTip: "Segure ou aponte para o item. 'Much' termina com som forte de 'tch' ('mâtch').",
+        builderPrompt: "Pratique na loja:",
+        builderTemplate: "I like this! Do you have it in _____?",
+        builderChips: ["medium", "large", "black", "another color"]
+      },
+      {
+        id: 'dr3',
+        category: 'directions',
+        tag: 'Transporte',
+        en: "Two tickets to the city center, please.",
+        pt: "Dois bilhetes para o centro da cidade, por favor.",
+        brTip: "Não esqueça de falar 'tickets' com 's' bem claro no final quando for mais de um!",
+        builderPrompt: "Compre sua passagem:",
+        builderTemplate: "One _____ ticket to the airport, please.",
+        builderChips: ["one-way (só ida)", "round-trip (ida e volta)", "metro", "bus"]
+      }
+    ];
+
+    // =========================================================================
+    // 2. DATA: "NO-PANIC" INTERACTIVE SIMULATOR SCENARIOS
+    // =========================================================================
+    const SIMULATOR_SCENARIOS = [
+      {
+        category: '☕ Café & Restaurant',
+        avatar: '🧑‍🍳',
+        role: 'Barista (Atendente do Café)',
+        promptEn: "Hi there! What can I get for you today?",
+        promptPt: "Oi! O que eu posso preparar para você hoje?",
+        options: [
+          {
+            en: "Hi! Can I have a cappuccino and a sandwich, please?",
+            pt: "Oi! Pode me ver um cappuccino e um sanduíche, por favor?",
+            why: "'Can I have...' é educado, natural e usado por nativos o tempo todo. Você não precisa conjugar verbos difíceis!",
+            tip: "Dica de pronúncia: Fale 'sanduíche' como 'SÉN-uitch' (o 'd' quase desaparece)."
+          },
+          {
+            en: "Hello! Just an iced coffee, please.",
+            pt: "Olá! Só um café gelado, por favor.",
+            why: "Usar 'Just...' (Só...) é super natural quando você quer apenas uma coisa rápida.",
+            tip: "Dica de pronúncia: 'Iced' soa como 'áist' (uma sílaba só)."
+          },
+          {
+            en: "Hi! One moment, please. What do you recommend?",
+            pt: "Oi! Um momento, por favor. O que você recomenda?",
+            why: "Quando você está em dúvida no cardápio, devolver uma pergunta simples ganha tempo e cria simpatia!",
+            tip: "Dica de pronúncia: Sorria ao dizer 'One moment, please' — funciona sempre!"
+          }
+        ]
+      },
+      {
+        category: '💬 Papo Fácil & Amigos',
+        avatar: '🧳',
+        role: 'Viajante simpático(a) no Hostel / Tour',
+        promptEn: "Hey! Nice to meet you. Where are you traveling from?",
+        promptPt: "Ei! Prazer em conhecer você. De onde você está viajando?",
+        options: [
+          {
+            en: "Nice to meet you too! I'm from Brazil.",
+            pt: "Prazer em conhecer você também! Eu sou do Brasil.",
+            why: "Curta, calorosa e direta. Todo mundo conhece o Brasil e geralmente já puxa assunto sobre música, praia ou futebol!",
+            tip: "Dica de pronúncia: Em 'Brazil', a sílaba forte é no final: 'bra-ZIL' (com som de Z)."
+          },
+          {
+            en: "Hi! I'm from São Paulo, Brazil. And you?",
+            pt: "Oi! Eu sou de São Paulo, Brasil. E você?",
+            why: "Terminar com 'And you?' (E você?) é o segredo para manter a conversa fluindo sem você precisar falar muito!",
+            tip: "Dica de pronúncia: Junte 'And you?' como 'Én-diú?'."
+          },
+          {
+            en: "Hello! I'm from Brazil. It's my first time here!",
+            pt: "Olá! Sou do Brasil. É a minha primeira vez aqui!",
+            why: "Contar que é sua primeira vez faz a outra pessoa querer te dar dicas legais da cidade.",
+            tip: "Dica de pronúncia: 'First time' = 'fârst taim'."
+          }
+        ]
+      },
+      {
+        category: '✈️ Airport & Immigration',
+        avatar: '🛂',
+        role: 'Agente de Imigração',
+        promptEn: "Good morning. What is the purpose of your visit?",
+        promptPt: "Bom dia. Qual é o motivo da sua visita?",
+        options: [
+          {
+            en: "Good morning! I'm here on vacation.",
+            pt: "Bom dia! Estou aqui de férias.",
+            why: "Na imigração, respostas curtas e calmas são as melhores! 'On vacation' (ou 'tourism') responde exatamente o que pediram.",
+            tip: "Dica de pronúncia: 'Vacation' = 'va-KÊI-shon'."
+          },
+          {
+            en: "Tourism. I'm staying for ten days.",
+            pt: "Turismo. Vou ficar por dez dias.",
+            why: "Você já responde o motivo e o tempo de estadia em duas frases super fáceis.",
+            tip: "Dica de pronúncia: 'Tourism' = 'TÚ-ri-zm'."
+          },
+          {
+            en: "I'm visiting the city for one week.",
+            pt: "Estou visitando a cidade por uma semana.",
+            why: "Presente contínuo ('I'm visiting') é muito natural para planos de viagem.",
+            tip: "Dica de pronúncia: 'Week' tem som de 'i' firme ('uík')."
+          }
+        ]
+      },
+      {
+        category: '🏨 Hotel & Check-in',
+        avatar: '🛎️',
+        role: 'Recepcionista do Hotel',
+        promptEn: "Welcome! How can I help you today?",
+        promptPt: "Bem-vindo(a)! Como posso ajudar você hoje?",
+        options: [
+          {
+            en: "Hi! I'd like to check in, please. My name is...",
+            pt: "Oi! Eu gostaria de fazer o check-in, por favor. Meu nome é...",
+            why: "'I'd like to...' (Eu gostaria de...) é super educado e serve para qualquer situação de atendimento.",
+            tip: "Dica de pronúncia: 'Check in' = 'tchék in' (sem 'tchi' no meio)."
+          },
+          {
+            en: "Hello! I have a reservation for two nights.",
+            pt: "Olá! Eu tenho uma reserva para duas noites.",
+            why: "Frase clara que já informa o tempo da sua reserva.",
+            tip: "Dica de pronúncia: 'Nights' = 'náits' (o 'gh' é mudo!)."
+          },
+          {
+            en: "Hi! Could you tell me the Wi-Fi password, please?",
+            pt: "Oi! Você poderia me dizer a senha do Wi-Fi, por favor?",
+            why: "Super útil logo que você chega para avisar a família no Brasil!",
+            tip: "Dica de pronúncia: 'Password' = 'PÉSS-uôrd'."
+          }
+        ]
+      },
+      {
+        category: '💬 Papo Fácil & Amigos',
+        avatar: '🚶‍♀️',
+        role: 'Morador(a) local no parque / café',
+        promptEn: "Are you enjoying your trip so far?",
+        promptPt: "Você está gostando da sua viagem até agora?",
+        options: [
+          {
+            en: "Yes, a lot! The city is very beautiful.",
+            pt: "Sim, muito! A cidade é muito bonita.",
+            why: "Elogiar a cidade da pessoa sempre gera um sorriso e uma conversa gostosa.",
+            tip: "Dica de pronúncia: 'Beautiful' = 'BIÚ-ti-ful'."
+          },
+          {
+            en: "Yes! The food here is amazing.",
+            pt: "Sim! A comida aqui é incrível.",
+            why: "Falar de comida é o jeito mais fácil de fazer amigos em qualquer país!",
+            tip: "Dica de pronúncia: 'Amazing' = 'a-MÊI-zin'."
+          },
+          {
+            en: "Yes, I love it! Everyone is very friendly.",
+            pt: "Sim, estou adorando! Todo mundo é muito simpático.",
+            why: "Simples, positiva e expressa exatamente o que você sente.",
+            tip: "Dica de pronúncia: 'Friendly' = 'FRÉND-li'."
+          }
+        ]
+      },
+      {
+        category: '🗺️ Ruas & Compras',
+        avatar: '🛍️',
+        role: 'Vendedor(a) da Loja',
+        promptEn: "Let me know if you need any help!",
+        promptPt: "Me avise se precisar de alguma ajuda!",
+        options: [
+          {
+            en: "Thank you! I'm just looking right now.",
+            pt: "Obrigado(a)! Estou só olhando no momento.",
+            why: "A frase mais útil de qualquer viagem! Tira a pressão do vendedor ficar em cima de você.",
+            tip: "Dica de pronúncia: 'Just looking' = 'djâst LÚ-kin'."
+          },
+          {
+            en: "Actually, yes! How much is this one?",
+            pt: "Na verdade, sim! Quanto custa este aqui?",
+            why: "'Actually' significa 'Na verdade' (não 'atualmente'!) e soa super natural.",
+            tip: "Dica de pronúncia: 'Actually' = 'ÉK-tchu-a-li'."
+          },
+          {
+            en: "Thanks! Do you have this in a larger size?",
+            pt: "Obrigado(a)! Vocês têm isso em um tamanho maior?",
+            why: "Fácil de adaptar: troque 'larger' (maior) por 'smaller' (menor).",
+            tip: "Dica de pronúncia: 'Size' = 'sáiz'."
+          }
+        ]
+      }
+    ];
+
+    // =========================================================================
+    // 3. STATE & LOCAL STORAGE PERSISTENCE
+    // =========================================================================
+    let state = {
+      showPt: true,
+      activeCategory: 'smalltalk',
+      mainMode: 'explore', // 'explore' | 'simulator'
+      practicedIds: [], // array of practiced card/sim IDs
+      quoteIndex: 0,
+      simIndex: 0,
+      selectedSimOptionIndex: null,
+      builderSelections: {} // cardId -> selected chip
+    };
+
+    function loadState() {
+      try {
+        const saved = localStorage.getItem('travel_english_a2_br_v1');
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          state.practicedIds = Array.isArray(parsed.practicedIds) ? parsed.practicedIds : [];
+          state.showPt = typeof parsed.showPt === 'boolean' ? parsed.showPt : true;
+        }
+      } catch (e) {
+        console.warn('Could not load saved progress:', e);
+      }
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem('travel_english_a2_br_v1', JSON.stringify({
+          practicedIds: state.practicedIds,
+          showPt: state.showPt
+        }));
+      } catch (e) {
+        console.warn('Could not save progress:', e);
+      }
+    }
+
+    // =========================================================================
+    // 4. SPEECH SYNTHESIS (AUDIO PRONUNCIATION - NORMAL & SLOW)
+    // =========================================================================
+    let currentSpeakingBtn = null;
+
+    function speakEnglish(text, rate = 1.0, btnElement = null) {
+      if (!('speechSynthesis' in window)) {
+        showToast('🔇', 'Seu navegador não suporta áudio automático.');
+        return;
+      }
+
+      // Cancel any ongoing speech
+      window.speechSynthesis.cancel();
+      if (currentSpeakingBtn) {
+        currentSpeakingBtn.classList.remove('speaking-active');
+      }
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'en-US';
+      utterance.rate = rate;
+      utterance.pitch = 1.0;
+
+      // Prefer a clear, natural English voice if available
+      const voices = window.speechSynthesis.getVoices();
+      const preferredVoice =
+        voices.find(v => v.lang === 'en-US' && (v.name.includes('Google') || v.name.includes('Samantha') || v.name.includes('Natural'))) ||
+        voices.find(v => v.lang.startsWith('en-'));
+
+      if (preferredVoice) {
+        utterance.voice = preferredVoice;
+      }
+
+      if (btnElement) {
+        currentSpeakingBtn = btnElement;
+        btnElement.classList.add('speaking-active');
+      }
+
+      utterance.onend = () => {
+        if (btnElement) btnElement.classList.remove('speaking-active');
+        currentSpeakingBtn = null;
+      };
+
+      utterance.onerror = () => {
+        if (btnElement) btnElement.classList.remove('speaking-active');
+        currentSpeakingBtn = null;
+      };
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    // Preload voices on browsers that load them asynchronously
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+    }
+
+    // =========================================================================
+    // 5. UI RENDERING & INTERACTIONS
+    // =========================================================================
+    function showToast(icon, text) {
+      const toast = document.getElementById('toastMessage');
+      document.getElementById('toastIcon').textContent = icon;
+      document.getElementById('toastText').textContent = text;
+
+      toast.classList.remove('opacity-0', 'translate-y-3');
+      toast.classList.add('opacity-100', 'translate-y-0');
+
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-3');
+        toast.classList.remove('opacity-100', 'translate-y-0');
+      }, 2600);
+    }
+
+    function updateProgressUI() {
+      const count = state.practicedIds.length;
+      document.getElementById('practicedCount').textContent = count;
+
+      const badgePill = document.getElementById('badgePill');
+      const nextText = document.getElementById('nextMilestoneText');
+      const progressBar = document.getElementById('progressBar');
+
+      let pct = Math.min(100, Math.max(6, (count / 20) * 100));
+      progressBar.style.width = `${pct}%`;
+
+      if (count < 5) {
+        badgePill.textContent = '🌱 First Step';
+        nextText.textContent = `Faltam ${5 - count} frases para ☕ Coffee Ready`;
+      } else if (count < 10) {
+        badgePill.textContent = '☕ Coffee Ready';
+        nextText.textContent = `Faltam ${10 - count} frases para ✈️ Airport Pro`;
+      } else if (count < 16) {
+        badgePill.textContent = '✈️ Airport Pro';
+        nextText.textContent = `Faltam ${16 - count} frases para 🌟 Travel Communicator`;
+      } else {
+        badgePill.textContent = '🌟 Travel Communicator';
+        nextText.textContent = 'Você está pronto(a) para conversar viajando!';
+      }
+    }
+
+    function togglePracticeMark(id) {
+      const idx = state.practicedIds.indexOf(id);
+      if (idx === -1) {
+        state.practicedIds.push(id);
+        showToast('⭐', 'Boa! Mais um passo na sua confiança!');
+      } else {
+        state.practicedIds.splice(idx, 1);
+      }
+      saveState();
+      updateProgressUI();
+      renderCards();
+    }
+
+    function togglePortugueseHints() {
+      state.showPt = !state.showPt;
+      saveState();
+      applyPortugueseVisibility();
+    }
+
+    function applyPortugueseVisibility() {
+      const btn = document.getElementById('togglePtBtn');
+      const label = document.getElementById('ptToggleText');
+      if (state.showPt) {
+        label.textContent = 'Dicas PT: ON';
+        btn.className = 'flex items-center gap-2 px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold border transition-all cursor-pointer bg-leaf-50 text-leaf-700 border-leaf-200 hover:bg-leaf-100';
+      } else {
+        label.textContent = 'Dicas PT: OFF';
+        btn.className = 'flex items-center gap-2 px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold border transition-all cursor-pointer bg-slate-100 text-slate-600 border-slate-200 hover:bg-slate-200';
+      }
+
+      document.querySelectorAll('.pt-hint').forEach(el => {
+        el.style.display = state.showPt ? '' : 'none';
+      });
+    }
+
+    function cycleMindsetQuote() {
+      state.quoteIndex = (state.quoteIndex + 1) % MINDSET_QUOTES.length;
+      const q = MINDSET_QUOTES[state.quoteIndex];
+      document.getElementById('mindsetQuoteEn').textContent = q.en;
+      document.getElementById('mindsetQuotePt').textContent = q.pt;
+    }
+
+    function switchMainMode(mode) {
+      state.mainMode = mode;
+      const exploreView = document.getElementById('exploreView');
+      const simulatorView = document.getElementById('simulatorView');
+      const tabExploreBtn = document.getElementById('tabExploreBtn');
+      const tabSimulatorBtn = document.getElementById('tabSimulatorBtn');
+
+      if (mode === 'explore') {
+        exploreView.classList.remove('hidden');
+        simulatorView.classList.add('hidden');
+        tabExploreBtn.className = 'flex-1 py-3 px-4 rounded-xl font-display font-bold text-sm flex items-center justify-center gap-2 transition-all cursor-pointer bg-white text-skycalm-700 shadow-xs';
+        tabSimulatorBtn.className = 'flex-1 py-3 px-4 rounded-xl font-display font-bold text-sm flex items-center justify-center gap-2 transition-all cursor-pointer text-slate-600 hover:text-slate-900';
+      } else {
+        exploreView.classList.add('hidden');
+        simulatorView.classList.remove('hidden');
+        tabSimulatorBtn.className = 'flex-1 py-3 px-4 rounded-xl font-display font-bold text-sm flex items-center justify-center gap-2 transition-all cursor-pointer bg-white text-skycalm-700 shadow-xs';
+        tabExploreBtn.className = 'flex-1 py-3 px-4 rounded-xl font-display font-bold text-sm flex items-center justify-center gap-2 transition-all cursor-pointer text-slate-600 hover:text-slate-900';
+        renderSimulator();
+      }
+    }
+
+    function renderCategoryBar() {
+      const bar = document.getElementById('categoryBar');
+      bar.innerHTML = CATEGORIES.map(cat => {
+        const active = cat.id === state.activeCategory;
+        return `
+          <button
+            onclick="selectCategory('${cat.id}')"
+            class="px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-semibold whitespace-nowrap flex items-center gap-2 border transition-all cursor-pointer ${
+              active
+                ? 'bg-skycalm-600 text-white border-skycalm-600 shadow-xs'
+                : 'bg-white text-slate-700 border-sand-200 hover:bg-sand-50'
+            }"
+          >
+            <span>${cat.icon}</span>
+            <span>${cat.label}</span>
+          </button>
+        `;
+      }).join('');
+
+      const activeCat = CATEGORIES.find(c => c.id === state.activeCategory) || CATEGORIES[0];
+      document.getElementById('catTitle').textContent = activeCat.title;
+      document.getElementById('catDesc').textContent = activeCat.desc;
+    }
+
+    function selectCategory(categoryId) {
+      state.activeCategory = categoryId;
+      renderCategoryBar();
+      renderCards();
+    }
+
+    function selectBuilderChip(cardId, chipIndex) {
+      const card = PHRASE_CARDS.find(c => c.id === cardId);
+      if (!card) return;
+      state.builderSelections[cardId] = card.builderChips[chipIndex];
+      renderCards();
+    }
+
+    function speakCardPhrase(cardId, rate, btnElement) {
+      const card = PHRASE_CARDS.find(c => c.id === cardId);
+      if (card) speakEnglish(card.en, rate, btnElement);
+    }
+
+    function speakBuiltCardPhrase(cardId, rate, btnElement) {
+      const card = PHRASE_CARDS.find(c => c.id === cardId);
+      if (card) speakEnglish(getBuiltSentence(card), rate, btnElement);
+    }
+
+    function speakRescuePhrase(index, rate, btnElement) {
+      const item = RESCUE_PHRASES[index];
+      if (item) speakEnglish(item.en, rate, btnElement);
+    }
+
+    function getBuiltSentence(card) {
+      const chosen = state.builderSelections[card.id] || card.builderChips[0];
+      // Clean parenthetical Portuguese gloss if present on chip
+      const cleanChip = chosen.replace(/\s*\(.*?\)/g, '');
+      // Handle templates with two blanks by filling second with next chip
+      if ((card.builderTemplate.match(/_____/g) || []).length === 2) {
+        const idx = card.builderChips.indexOf(chosen);
+        const secondChip = card.builderChips[(idx + 1) % card.builderChips.length].replace(/\s*\(.*?\)/g, '');
+        return card.builderTemplate.replace('_____', cleanChip).replace('_____', secondChip);
+      }
+      return card.builderTemplate.replace('_____', cleanChip);
+    }
+
+    function renderCards() {
+      const container = document.getElementById('cardsContainer');
+      const filtered = PHRASE_CARDS.filter(c => c.category === state.activeCategory);
+
+      container.innerHTML = filtered.map(card => {
+        const isPracticed = state.practicedIds.includes(card.id);
+        const selectedChip = state.builderSelections[card.id] || card.builderChips[0];
+        const builtSentence = getBuiltSentence(card);
+
+        return `
+          <article class="bg-white rounded-3xl p-5 border ${isPracticed ? 'border-leaf-300 ring-2 ring-leaf-100' : 'border-sand-200'} card-hover flex flex-col justify-between space-y-4">
+            <div class="space-y-3">
+              <!-- Top row: Tag & Audio Controls -->
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <span class="px-2.5 py-1 rounded-lg bg-sand-100 text-slate-700 text-[11px] font-bold">
+                  ${card.tag}
+                </span>
+                <div class="flex items-center gap-1.5">
+                  <button
+                    onclick="speakCardPhrase('${card.id}', 1.0, this)"
+                    class="px-3 py-1.5 rounded-xl bg-skycalm-600 hover:bg-skycalm-700 text-white text-xs font-semibold flex items-center gap-1 transition-colors cursor-pointer"
+                    title="Ouvir em velocidade normal"
+                  >
+                    <span>🔊</span>
+                    <span>Ouvir</span>
+                  </button>
+                  <button
+                    onclick="speakCardPhrase('${card.id}', 0.72, this)"
+                    class="px-2.5 py-1.5 rounded-xl bg-skycalm-50 hover:bg-skycalm-100 text-skycalm-700 border border-skycalm-200 text-xs font-semibold flex items-center gap-1 transition-colors cursor-pointer"
+                    title="Ouvir bem devagar"
+                  >
+                    <span>🐢</span>
+                    <span>Devagar</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Main English Phrase -->
+              <div>
+                <h4 class="font-display font-bold text-lg sm:text-xl text-slate-800 leading-snug">
+                  "${card.en}"
+                </h4>
+                <p class="pt-hint text-sm text-slate-600 mt-1">
+                  🇧🇷 ${card.pt}
+                </p>
+              </div>
+
+              <!-- Brazilian Pronunciation Tip -->
+              <div class="pt-hint bg-amber-50/80 border border-amber-200/80 rounded-2xl p-3 text-xs text-amber-950 leading-relaxed">
+                <strong class="text-amber-800">🎯 Dica para Brasileiros:</strong> ${card.brTip}
+              </div>
+
+              <!-- Interactive Easy Response Builder -->
+              <div class="bg-sand-50 border border-sand-200 rounded-2xl p-3.5 space-y-2.5">
+                <div class="flex items-center justify-between gap-2">
+                  <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                    🧩 ${card.builderPrompt}
+                  </span>
+                  <button
+                    onclick="speakBuiltCardPhrase('${card.id}', 0.9, this)"
+                    class="text-xs font-bold text-skycalm-600 hover:text-skycalm-700 flex items-center gap-1 cursor-pointer"
+                  >
+                    <span>🔊</span> Ouvir minha frase
+                  </button>
+                </div>
+
+                <!-- Built Sentence Preview -->
+                <p class="font-semibold text-sm text-slate-800 bg-white px-3 py-2 rounded-xl border border-sand-200">
+                  "${builtSentence}"
+                </p>
+
+                <!-- Clickable Word Chips -->
+                <div class="flex flex-wrap gap-1.5">
+                  ${card.builderChips.map((chip, chipIdx) => {
+                    const isSelected = chip === selectedChip;
+                    return `
+                      <button
+                        onclick="selectBuilderChip('${card.id}', ${chipIdx})"
+                        class="px-2.5 py-1 rounded-lg text-xs font-medium border transition-all cursor-pointer ${
+                          isSelected
+                            ? 'bg-skycalm-600 text-white border-skycalm-600'
+                            : 'bg-white text-slate-700 border-sand-300 hover:border-skycalm-400'
+                        }"
+                      >
+                        ${chip}
+                      </button>
+                    `;
+                  }).join('')}
+                </div>
+              </div>
+            </div>
+
+            <!-- Bottom Confidence Check Button -->
+            <button
+              onclick="togglePracticeMark('${card.id}')"
+              class="w-full py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-all cursor-pointer ${
+                isPracticed
+                  ? 'bg-leaf-600 text-white shadow-2xs'
+                  : 'bg-leaf-50 hover:bg-leaf-100 text-leaf-700 border border-leaf-200'
+              }"
+            >
+              <span>${isPracticed ? '✅' : '🗣️'}</span>
+              <span>${isPracticed ? 'Praticada em voz alta! (Clique para desmarcar)' : 'Falei em voz alta! Marcar como praticada'}</span>
+            </button>
+          </article>
+        `;
+      }).join('');
+
+      applyPortugueseVisibility();
+    }
+
+    // =========================================================================
+    // 6. SIMULATOR LOGIC
+    // =========================================================================
+    function renderSimulator() {
+      const scenario = SIMULATOR_SCENARIOS[state.simIndex];
+      document.getElementById('simScenarioBadge').textContent = scenario.category;
+      document.getElementById('simStepCounter').textContent = `Situação ${state.simIndex + 1} de ${SIMULATOR_SCENARIOS.length}`;
+      document.getElementById('simAvatar').textContent = scenario.avatar;
+      document.getElementById('simRole').textContent = scenario.role;
+      document.getElementById('simPromptEn').textContent = `"${scenario.promptEn}"`;
+      document.getElementById('simPromptPt').textContent = `🇧🇷 Tradução: "${scenario.promptPt}"`;
+
+      const optionsContainer = document.getElementById('simOptionsContainer');
+      optionsContainer.innerHTML = scenario.options.map((opt, idx) => {
+        const isSelected = state.selectedSimOptionIndex === idx;
+        return `
+          <button
+            onclick="chooseSimulatorOption(${idx})"
+            class="w-full text-left p-4 rounded-2xl border transition-all cursor-pointer flex items-start justify-between gap-3 ${
+              isSelected
+                ? 'bg-leaf-50 border-leaf-500 ring-2 ring-leaf-200'
+                : 'bg-sand-50/70 hover:bg-white border-sand-200 hover:border-skycalm-300'
+            }"
+          >
+            <div class="space-y-1">
+              <p class="font-display font-bold text-sm sm:text-base text-slate-800">
+                "${opt.en}"
+              </p>
+              <p class="pt-hint text-xs text-slate-600">
+                🇧🇷 ${opt.pt}
+              </p>
+            </div>
+            <span class="shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${
+              isSelected ? 'bg-leaf-600 text-white' : 'bg-white border border-sand-300 text-slate-500'
+            }">
+              ${isSelected ? '✓' : idx + 1}
+            </span>
+          </button>
+        `;
+      }).join('');
+
+      const feedbackBox = document.getElementById('simFeedbackBox');
+      if (state.selectedSimOptionIndex !== null) {
+        const chosen = scenario.options[state.selectedSimOptionIndex];
+        feedbackBox.classList.remove('hidden');
+        document.getElementById('simWhyItWorks').textContent = chosen.why;
+        document.getElementById('simChosenText').textContent = `"${chosen.en}"`;
+        document.getElementById('simChosenTip').textContent = `🎯 ${chosen.tip}`;
+
+        const simPracticeId = `sim_${state.simIndex}_${state.selectedSimOptionIndex}`;
+        const alreadyDone = state.practicedIds.includes(simPracticeId);
+        const triedBtn = document.getElementById('simTriedBtn');
+        triedBtn.innerHTML = alreadyDone
+          ? '<span>✅</span><span>Praticado! Muito bem!</span>'
+          : '<span>🗣️</span><span>Eu falei em voz alta! (+1 Confiança)</span>';
+      } else {
+        feedbackBox.classList.add('hidden');
+      }
+
+      applyPortugueseVisibility();
+    }
+
+    function speakSimulatorPrompt(rate) {
+      const scenario = SIMULATOR_SCENARIOS[state.simIndex];
+      speakEnglish(scenario.promptEn, rate);
+    }
+
+    function speakChosenSimAnswer(rate) {
+      if (state.selectedSimOptionIndex === null) return;
+      const chosen = SIMULATOR_SCENARIOS[state.simIndex].options[state.selectedSimOptionIndex];
+      speakEnglish(chosen.en, rate);
+    }
+
+    function chooseSimulatorOption(idx) {
+      state.selectedSimOptionIndex = idx;
+      renderSimulator();
+      const chosen = SIMULATOR_SCENARIOS[state.simIndex].options[idx];
+      speakEnglish(chosen.en, 0.95);
+    }
+
+    function markSimulatorTried() {
+      if (state.selectedSimOptionIndex === null) return;
+      const simPracticeId = `sim_${state.simIndex}_${state.selectedSimOptionIndex}`;
+      if (!state.practicedIds.includes(simPracticeId)) {
+        state.practicedIds.push(simPracticeId);
+        saveState();
+        updateProgressUI();
+        showToast('🌟', 'Incrível! Você está destravando sua fala!');
+      } else {
+        showToast('💚', 'Você já ganhou pontos por essa fala!');
+      }
+      renderSimulator();
+    }
+
+    function nextSimulatorScenario() {
+      state.simIndex = (state.simIndex + 1) % SIMULATOR_SCENARIOS.length;
+      state.selectedSimOptionIndex = null;
+      renderSimulator();
+    }
+
+    // =========================================================================
+    // 7. RESCUE MODAL ("DEU BRANCO?")
+    // =========================================================================
+    function renderRescueModal() {
+      const list = document.getElementById('rescueList');
+      list.innerHTML = RESCUE_PHRASES.map((item, index) => `
+        <div class="bg-sand-50 border border-sand-200 rounded-2xl p-4 space-y-2">
+          <div class="flex items-start justify-between gap-2">
+            <p class="font-display font-bold text-sm sm:text-base text-slate-800">
+              "${item.en}"
+            </p>
+            <div class="flex items-center gap-1.5 shrink-0">
+              <button
+                onclick="speakRescuePhrase(${index}, 1.0, this)"
+                class="px-2.5 py-1.5 rounded-xl bg-skycalm-600 text-white text-xs font-semibold cursor-pointer"
+              >
+                🔊
+              </button>
+              <button
+                onclick="speakRescuePhrase(${index}, 0.72, this)"
+                class="px-2.5 py-1.5 rounded-xl bg-white border border-skycalm-200 text-skycalm-700 text-xs font-semibold cursor-pointer"
+              >
+                🐢
+              </button>
+            </div>
+          </div>
+          <p class="text-xs text-slate-600">🇧🇷 ${item.pt}</p>
+          <p class="text-[11px] text-amber-900 bg-amber-100/70 px-2.5 py-1.5 rounded-lg">
+            💡 ${item.brTip}
+          </p>
+        </div>
+      `).join('');
+    }
+
+    function openRescueModal() {
+      renderRescueModal();
+      document.getElementById('rescueModal').classList.remove('hidden');
+    }
+
+    function closeRescueModal() {
+      document.getElementById('rescueModal').classList.add('hidden');
+    }
+
+    // =========================================================================
+    // 8. INITIALIZATION
+    // =========================================================================
+    window.addEventListener('DOMContentLoaded', () => {
+      loadState();
+      updateProgressUI();
+      renderCategoryBar();
+      renderCards();
+      applyPortugueseVisibility();
+    });
+  </script>
+</body>
+</html>
